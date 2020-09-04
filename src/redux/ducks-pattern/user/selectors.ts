@@ -3,10 +3,17 @@ import { tUserState } from './reducer'
 import { useSelector } from 'react-redux'
 import { composeSelectors, tSelectorMap, tSelector, tAppState } from '../store'
 
+/**
+ * Custom Selectors allow us to customize how we access the Redux store.
+ * The necessity of this is up for debate. In the other Redux store sample,
+ * we will be deferring to components to access data in more explicit ways
+ * simplifying the Redux arena exponentially.
+ */
+
 // Define each selector. For proper type hinting, must be of type tSelector.
 // Also for type hinting, the state passed in must be the entire state. Possibly a better way to do this?
 const userSelector: tSelector = (_state: tAppState): tUser => _state.user.user
-const userUsernameSelector: tSelector = (_state: tAppState): string => _state?.user?.user?.username ? _state.user.user.username : ''
+const userUsernameSelector: tSelector = (_state: tAppState): string => _state.user?.user?.username ? _state.user.user.username : ''
 
 // Define the selector mapping for type hinting by adding tSelectorMap,
 // then assemble all of the selectors in a way that will be used within the Views.
@@ -26,5 +33,4 @@ type tUserSelectors = tUserState & {
 // which does the memoizing. To reduce boilderplate, we compose our selectors within a single useSelector call.
 // Basically it gives us memoized access to the entire state through function-based getters that already contain
 // the data we need.
-// In larger applications this may have implications, but it may also be perfectly fine. Requires some additional testing.
-export const useUserSelectors: () => tUserSelectors = () => useSelector(composeSelectors<tUserSelectors>(selectors))
+export const useUserSelectors = <tUserSelectors>() => useSelector(composeSelectors<tUserSelectors>(selectors))
