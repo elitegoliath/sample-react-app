@@ -1,0 +1,1 @@
+export { default as LifeCycles } from './life-cycles.page'
